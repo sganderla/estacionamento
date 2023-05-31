@@ -3,10 +3,9 @@ package br.com.uniamerica.estacionamento.controller;
 import br.com.uniamerica.estacionamento.entity.Modelo;
 import br.com.uniamerica.estacionamento.repository.ModeloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0.0, 25/04/2023
  * @since 1.0.0
  */
-@Controller
+@RestController
 @RequestMapping(value = "/api/modelo")
 public class ModeloController {
 
@@ -23,8 +22,6 @@ public class ModeloController {
     private ModeloRepository modeloRepository;
 
     /**
-     *
-     * http://localhost:8080/api/modelo/1
      *
      * @param id
      * @return
@@ -38,8 +35,6 @@ public class ModeloController {
     }
 
     /**
-     * http://localhost:8080/api/modelo?id=1
-     *
      * @param id
      * @return
      */
@@ -51,13 +46,22 @@ public class ModeloController {
                 : ResponseEntity.ok(modelo);
     }
 
+    /**
+     *
+     * @return
+     */
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.modeloRepository.findAll());
     }
 
+    /**
+     *
+     * @param modelo
+     * @return
+     */
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Modelo modelo){
+    public ResponseEntity<?> cadastrar(@RequestBody @Validated final Modelo modelo){
         try {
             this.modeloRepository.save(modelo);
             return ResponseEntity.ok("Registro Cadastrado com Sucesso");
@@ -68,6 +72,12 @@ public class ModeloController {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param modelo
+     * @return
+     */
     @PutMapping
     public ResponseEntity<?> editar(
             @RequestParam("id") final Long id,
@@ -91,6 +101,11 @@ public class ModeloController {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping
     public ResponseEntity<?> delete(
             @RequestParam("id") final Long id
@@ -101,3 +116,9 @@ public class ModeloController {
         return ResponseEntity.ok("Registro Excluido com Sucesso");
     }
 }
+
+
+
+
+
+

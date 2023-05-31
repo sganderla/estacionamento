@@ -30,7 +30,6 @@ public abstract class AbstractEntity {
     @Column(name = "ativo", nullable = false)
     private boolean ativo;
 
-
     /**
      *
      */

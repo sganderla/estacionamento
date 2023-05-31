@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
  * @since 1.0.0
  */
 @Repository
-public interface ModeloRepository extends JpaRepository<Modelo, Long> { }
+public interface ModeloRepository extends JpaRepository<Modelo, Long> {
+
+}
 
 
 
