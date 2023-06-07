@@ -4,6 +4,8 @@ import br.com.uniamerica.estacionamento.entity.Marca;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Eduardo Sganderla
  *
@@ -11,7 +13,15 @@ import org.springframework.stereotype.Repository;
  * @since 1.0.0
  */
 @Repository
-public interface MarcaRepository extends JpaRepository<Marca, Long> { }
+public interface MarcaRepository extends JpaRepository<Marca, Long> {
+
+    /**
+     *
+     * @return
+     */
+    public List<Marca> findByAtivoTrue();
+
+}
 
 
 

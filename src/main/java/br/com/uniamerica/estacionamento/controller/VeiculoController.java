@@ -1,7 +1,8 @@
 package br.com.uniamerica.estacionamento.controller;
 
-import br.com.uniamerica.estacionamento.entity.Modelo;
-import br.com.uniamerica.estacionamento.repository.ModeloRepository;
+import br.com.uniamerica.estacionamento.entity.Veiculo;
+import br.com.uniamerica.estacionamento.repository.VeiculoRepository;
+import br.com.uniamerica.estacionamento.service.VeiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -18,101 +19,104 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/veiculo")
 public class VeiculoController {
 
-//    @Autowired
-//    private ModeloRepository modeloRepository;
-//
-//    /**
-//     *
-//     * @param id
-//     * @return
-//     */
-//    @GetMapping("/{id}")
-//    public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
-//        final Modelo modelo = this.modeloRepository.findById(id).orElse(null);
-//        return modelo == null
-//                ? ResponseEntity.badRequest().body("Nenhum valor encontrado.")
-//                : ResponseEntity.ok(modelo);
-//    }
-//
-//    /**
-//     * @param id
-//     * @return
-//     */
-//    @GetMapping
-//    public ResponseEntity<?> findByIdRequest(@RequestParam("id") final Long id){
-//        final Modelo modelo = this.modeloRepository.findById(id).orElse(null);
-//        return modelo == null
-//                ? ResponseEntity.badRequest().body("Nenhum valor encontrado.")
-//                : ResponseEntity.ok(modelo);
-//    }
-//
-//    /**
-//     *
-//     * @return
-//     */
-//    @GetMapping("/lista")
-//    public ResponseEntity<?> listaCompleta(){
-//        return ResponseEntity.ok(this.modeloRepository.findAll());
-//    }
-//
-//    /**
-//     *
-//     * @param modelo
-//     * @return
-//     */
-//    @PostMapping
-//    public ResponseEntity<?> cadastrar(@RequestBody final Modelo modelo){
-//        try {
-//            this.modeloRepository.save(modelo);
-//            return ResponseEntity.ok("Registro Cadastrado com Sucesso");
-//        }
-//        catch (DataIntegrityViolationException e){
-//            return ResponseEntity.internalServerError()
-//                    .body("Error: " + e.getCause().getCause().getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     * @param id
-//     * @param modelo
-//     * @return
-//     */
-//    @PutMapping
-//    public ResponseEntity<?> editar(
-//            @RequestParam("id") final Long id,
-//            @RequestBody final Modelo modelo
-//    ){
-//        try {
-//            final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
-//
-//            if (modeloBanco == null || !modeloBanco.getId().equals(modelo.getId())){
-//                throw new RuntimeException("Não foi possivel identificar o registro informado.");
-//            }
-//
-//            this.modeloRepository.save(modelo);
-//            return ResponseEntity.ok("Registro atualizado com Sucesso");
-//        }
-//        catch (DataIntegrityViolationException e){
-//            return ResponseEntity.internalServerError().body("Error: " + e.getCause().getCause().getMessage());
-//        }
-//        catch (RuntimeException e){
-//            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
-//        }
-//    }
-//
-//    /**
-//     *
-//     * @param id
-//     * @return
-//     */
-//    @DeleteMapping
-//    public ResponseEntity<?> delete(
-//            @RequestParam("id") final Long id
-//    ){
-//        final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
-//
-//        this.modeloRepository.delete(modeloBanco);
-//        return ResponseEntity.ok("Registro Excluido com Sucesso");
-//    }
+    @Autowired
+    private VeiculoRepository veiculoRepository;
+
+    @Autowired
+    private VeiculoService veiculoService;
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
+        final Veiculo veiculo = this.veiculoRepository.findById(id).orElse(null);
+        return veiculo == null
+                ? ResponseEntity.badRequest().body("Nenhum condutor encontrado para o ID = " + id + ".")
+                : ResponseEntity.ok(veiculo);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @GetMapping("/lista")
+    public ResponseEntity<?> listaCompleta(){
+        return ResponseEntity.ok(this.veiculoRepository.findAll());
+    }
+
+    /**
+     *
+     * @return
+     */
+    @GetMapping("/lista/ativo")
+    public ResponseEntity<?> listaCompletaAtivo(){
+        return ResponseEntity.ok(this.veiculoRepository.findByAtivoTrue());
+    }
+
+    /**
+     *
+     * @param veiculo
+     * @return
+     */
+    @PostMapping
+    public ResponseEntity<?> cadastrar(@RequestBody final Veiculo veiculo){
+        try {
+            this.veiculoService.cadastrar(veiculo);
+            return ResponseEntity.ok("Registro cadastrado com sucesso.");
+        }
+        catch (DataIntegrityViolationException e){
+            return ResponseEntity.internalServerError()
+                    .body("Error: " + e.getCause().getCause().getMessage());
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param id
+     * @param veiculo
+     * @return
+     */
+    @PutMapping
+    public ResponseEntity<?> editar(
+            @RequestParam("id") final Long id,
+            @RequestBody final Veiculo veiculo
+    ){
+        try {
+            this.veiculoRepository.save(veiculo);
+            return ResponseEntity.ok("Registro atualizado com sucesso.");
+        }
+        catch (DataIntegrityViolationException e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getCause().getCause().getMessage());
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping
+    public ResponseEntity<?> delete(
+            @RequestParam("id") final Long id
+    ){
+        try {
+            this.veiculoService.excluir(id);
+            return ResponseEntity.ok("Registro excluido com sucesso.");
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+    }
 }

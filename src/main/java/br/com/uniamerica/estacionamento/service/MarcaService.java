@@ -1,7 +1,7 @@
 package br.com.uniamerica.estacionamento.service;
 
-import br.com.uniamerica.estacionamento.entity.Modelo;
-import br.com.uniamerica.estacionamento.repository.ModeloRepository;
+import br.com.uniamerica.estacionamento.entity.Marca;
+import br.com.uniamerica.estacionamento.repository.MarcaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,36 +14,36 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @Service
-public class ModeloService {
+public class MarcaService {
 
     @Autowired
-    private ModeloRepository modeloRepository;
+    private MarcaRepository marcaRepository;
 
     /**
      *
-     * @param modelo
+     * @param marca
      */
     @Transactional(rollbackFor = Exception.class)
-    public void cadastrar(final Modelo modelo) {
+    public void cadastrar(final Marca marca) {
 
-        this.modeloRepository.save(modelo);
+        this.marcaRepository.save(marca);
 
     }
 
     /**
      *
-     * @param modelo
+     * @param marca
      */
     @Transactional(rollbackFor = Exception.class)
-    public void editar(final Long id, final Modelo modelo) {
+    public void editar(final Long id, final Marca marca) {
 
-        final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
+        final Marca marcaBanco = this.marcaRepository.findById(id).orElse(null);
 
-        if (modeloBanco == null || !modeloBanco.getId().equals(modelo.getId())){
+        if (marcaBanco == null || !marcaBanco.getId().equals(marca.getId())){
             throw new RuntimeException("Não foi possivel identificar o registro informado.");
         }
 
-        this.modeloRepository.save(modelo);
+        this.marcaRepository.save(marca);
     }
 
     /**
@@ -53,12 +53,12 @@ public class ModeloService {
     @Transactional(rollbackFor = Exception.class)
     public void excluir(final Long id) {
 
-        final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
+        final Marca marcaBanco = this.marcaRepository.findById(id).orElse(null);
 
-        if (modeloBanco == null || !modeloBanco.getId().equals(id)){
+        if (marcaBanco == null || !marcaBanco.getId().equals(id)){
             throw new RuntimeException("Não foi possivel identificar o registro informado.");
         }
 
-        this.modeloRepository.delete(modeloBanco);
+        this.marcaRepository.delete(marcaBanco);
     }
 }

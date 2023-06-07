@@ -1,7 +1,7 @@
 package br.com.uniamerica.estacionamento.service;
 
-import br.com.uniamerica.estacionamento.entity.Modelo;
-import br.com.uniamerica.estacionamento.repository.ModeloRepository;
+import br.com.uniamerica.estacionamento.entity.Veiculo;
+import br.com.uniamerica.estacionamento.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,36 +14,36 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @Service
-public class ModeloService {
+public class VeiculoService {
 
     @Autowired
-    private ModeloRepository modeloRepository;
+    private VeiculoRepository veiculoRepository;
 
     /**
      *
-     * @param modelo
+     * @param veiculo
      */
     @Transactional(rollbackFor = Exception.class)
-    public void cadastrar(final Modelo modelo) {
+    public void cadastrar(final Veiculo veiculo) {
 
-        this.modeloRepository.save(modelo);
+        this.veiculoRepository.save(veiculo);
 
     }
 
     /**
      *
-     * @param modelo
+     * @param veiculo
      */
     @Transactional(rollbackFor = Exception.class)
-    public void editar(final Long id, final Modelo modelo) {
+    public void editar(final Long id, final Veiculo veiculo) {
 
-        final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
+        final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
 
-        if (modeloBanco == null || !modeloBanco.getId().equals(modelo.getId())){
+        if (veiculoBanco == null || !veiculoBanco.getId().equals(veiculo.getId())){
             throw new RuntimeException("Não foi possivel identificar o registro informado.");
         }
 
-        this.modeloRepository.save(modelo);
+        this.veiculoRepository.save(veiculo);
     }
 
     /**
@@ -53,12 +53,12 @@ public class ModeloService {
     @Transactional(rollbackFor = Exception.class)
     public void excluir(final Long id) {
 
-        final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
+        final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
 
-        if (modeloBanco == null || !modeloBanco.getId().equals(id)){
+        if (veiculoBanco == null || !veiculoBanco.getId().equals(id)){
             throw new RuntimeException("Não foi possivel identificar o registro informado.");
         }
 
-        this.modeloRepository.delete(modeloBanco);
+        this.veiculoRepository.delete(veiculoBanco);
     }
 }
