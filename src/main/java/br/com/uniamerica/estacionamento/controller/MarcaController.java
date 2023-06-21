@@ -81,9 +81,9 @@ public class MarcaController {
      * @param marca
      * @return
      */
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> editar(
-            @RequestParam("id") final Long id,
+            @PathVariable("id") final Long id,
             @RequestBody final Marca marca
     ){
         try {
@@ -106,9 +106,9 @@ public class MarcaController {
      * @param id
      * @return
      */
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(
-            @RequestParam("id") final Long id
+            @PathVariable("id") final Long id
     ){
         try {
             this.marcaService.excluir(id);
